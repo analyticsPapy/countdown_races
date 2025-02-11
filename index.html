@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comptes à Rebours</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: transparent;
+            color: white;
+            text-align: center;
+        }
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        .countdown {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            min-width: 150px;
+        }
+        .time {
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="countdown-container" id="countdown-container"></div>
+    
+    <script>
+        const races = [
+            { name: "Semi-marathon", date: new Date("2025-03-16T09:00:00") },
+            { name: "Liège-Bastogne-Liège", date: new Date("2025-04-26T07:00:00") },
+            { name: "Ironman 70.3 Tours", date: new Date("2025-06-01T06:00:00") }
+        ];
+
+        function updateCountdowns() {
+            const container = document.getElementById("countdown-container");
+            container.innerHTML = "";
+            
+            const now = new Date();
+            races.sort((a, b) => a.date - b.date);
+            
+            races.forEach(race => {
+                const diff = race.date - now;
+                if (diff > 0) {
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+                    const minutes = Math.floor((diff / (1000 * 60)) % 60);
+                    const seconds = Math.floor((diff / 1000) % 60);
+
+                    const countdownDiv = document.createElement("div");
+                    countdownDiv.classList.add("countdown");
+                    countdownDiv.innerHTML = `
+                        <div>${race.name}</div>
+                        <div class="time">${days}j ${hours}h ${minutes}m ${seconds}s</div>
+                    `;
+                    container.appendChild(countdownDiv);
+                }
+            });
+        }
+
+        setInterval(updateCountdowns, 1000);
+        updateCountdowns();
+    </script>
+</body>
+</html>
